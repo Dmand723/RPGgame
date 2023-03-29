@@ -15,7 +15,10 @@ public class PlayerController : MonoBehaviour
     [Header("componets")]
     public Rigidbody2D rig;
     public SpriteRenderer spriteR;
-    public LayerMask layerMask;
+    public LayerMask interactLayer;
+    public Transform muzzlePos;
+    public Muzzle muzzle;
+    private SpriteRenderer muzzleSprite;
 
     [Header("debug")]
     public bool debug;
@@ -26,6 +29,10 @@ public class PlayerController : MonoBehaviour
     // Called when object comes into game
     private void Awake()
     {
+        muzzle = GetComponentInChildren<Muzzle>();
+        muzzlePos = muzzle.transform;
+        muzzleSprite = muzzle.getMuzzleSprite();
+        muzzleSprite.enabled = false;
         rig = GetComponent<Rigidbody2D>();
         spriteR = GetComponentInChildren<SpriteRenderer>();
     }
@@ -45,6 +52,7 @@ public class PlayerController : MonoBehaviour
         {
             facingDir = moveInput.normalized;
             spriteR.flipX = (moveInput.x == 0) ? spriteR.flipX : moveInput.x > 0;
+           
         }
 
         if (interactInput)
@@ -65,15 +73,33 @@ public class PlayerController : MonoBehaviour
     {
         if(context.phase == InputActionPhase.Performed)
         {
+            muzzleSprite.enabled = true;
+        }
+        if(context.phase == InputActionPhase.Canceled)
+        {
             interactInput = true;
+            muzzleSprite.enabled = false;
         }
         
     }
     private void tryInteractTile()
     {
-        if(debug)
-        {
-            print("Player Inreracted with tile");
-        }
+        Collider2D hit = muzzle.GetComponent<Collider2D>();
+        //RaycastHit2D hit = Physics2D.Raycast(((Vector2)transform.position+facingDir)-new Vector2(0,0.25f), new Vector3(1,0,0)*facingDir,.1f, interactLayer);
+        
+        
+            if(hit.gameObject.CompareTag("Interact_FieldTile"))
+            {
+               FieldTile fieldTile = hit.gameObject.GetComponent<FieldTile>();
+                fieldTile.interact();
+            }
+
+
+            if (debug)
+            {
+                print("Player Interacted with tile");
+                
+            }
+        
     }
 }

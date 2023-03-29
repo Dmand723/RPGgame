@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81cee6f877773cb4a8591bc5a91da1af, type: 3}
+  m_Name: Potato
+  m_EditorClassIdentifier: 
+  daysToGrow: 3
+  growProgress_Sprites:
+  - {fileID: -2036105387, guid: 9b336f56c2396154ca0decdd55f83992, type: 3}
+  - {fileID: 1368894846, guid: 9b336f56c2396154ca0decdd55f83992, type: 3}
+  - {fileID: -783056586, guid: 9b336f56c2396154ca0decdd55f83992, type: 3}
+  harvest_Sprite: {fileID: -1857407865, guid: 9b336f56c2396154ca0decdd55f83992, type: 3}
+  noWaterTime: 2
+  purchasePrice: 0.2
+  sellPrice: 0.2
