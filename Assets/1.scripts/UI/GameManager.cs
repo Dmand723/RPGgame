@@ -4,14 +4,20 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
 using UnityEditor.AssetImporters;
+using Unity.VisualScripting;
+using UnityEngine.Rendering.Universal;
 
 public class GameManager : MonoBehaviour
 {
     public int curDay;
     public float money;
     public CropData selectedCrop;
+    public CropData[] cropOptions;
     public int cropInventory;
 
+    public PlayerController playerController;
+
+    public Light2D globalLight;
 
 
     public event UnityAction onNewDayEvent;
@@ -24,10 +30,21 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI seedText;
+    public TMP_Dropdown cropSelection;
 
 
+
+    public int hour;
+    public int minute;
+    public int updateCounter = 0;
+    public int scaleValue = 60;
+
+    [Header("Options")]
+    public bool hourFormat12;
     private void Awake()
     {
+        
+        print(cropSelection.value);
         if (instance ! == null && instance ! == this)
         {
             Destroy(gameObject);
@@ -38,11 +55,27 @@ public class GameManager : MonoBehaviour
         }
         curDay = PlayerPrefs.GetInt("curDay", 0);
         money = PlayerPrefs.GetFloat("money", 100);
-        cropInventory = PlayerPrefs.GetInt("cropInventory", 0);
+        cropInventory = playerController.seedInventory[cropSelection.value];
+        
         setNextDay();
         updateUI();
     }
 
+    private void FixedUpdate()
+    {
+        updateCounter++;
+        if (updateCounter >= scaleValue)
+        {
+            minute++;
+            updateCounter = 0;
+        }
+        if(minute >= 60)
+        {
+            minute = 00;
+            hour++;
+        }
+        updateUI();
+    }
 
     private void OnEnable()
     {
@@ -59,7 +92,7 @@ public class GameManager : MonoBehaviour
 
     public void onPlantCrop(CropData crop)
     {
-        cropInventory--;
+        playerController.seedInventory[cropSelection.value]--;
         updateUI();
     }
     public void onHarvestCrop(CropData crop)
@@ -72,8 +105,30 @@ public class GameManager : MonoBehaviour
         // Change money text
         moneyText.text = this.money.ToString();
       // change the seed count
-      seedText.text = this.cropInventory.ToString();
-        timeText.text = "12:00";
+      seedText.text = playerController.seedInventory[cropSelection.value].ToString();
+
+        string HourText = hour.ToString();
+        string MinuteText = minute.ToString();
+        if (hourFormat12 && hour > 12)
+        {
+            HourText = (hour -= 12).ToString();
+        }
+        else
+        {
+            HourText = hour.ToString(); 
+        }
+        if (minute <= 9)
+        {
+            timeText.text = HourText + ":0" + MinuteText;
+        }
+        else
+        {
+            timeText.text = HourText + ":" + MinuteText;
+        }
+        
+
+
+
         dayText.text = curDay.ToString();
 
 
@@ -86,6 +141,9 @@ public class GameManager : MonoBehaviour
     public void setNextDay()
     {
         curDay ++;
+        hour = 4;
+        minute = 30;
+        globalLight.intensity = .05f;
         onNewDayEvent?.Invoke();
         updateUI();
     }
@@ -93,8 +151,7 @@ public class GameManager : MonoBehaviour
     public void purchaseCrops(CropData crop)
     {
         money -= crop.purchasePrice;
-        cropInventory++;
-
+        playerController.seedInventory[cropSelection.value]++;
         updateUI();
     }
     public bool canPlantCrop()
@@ -102,17 +159,19 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public void onBuyCropButton(CropData crop)
+    public void onBuyCropButton()
     {
-        if(money >= crop.purchasePrice)
+        if(money >= selectedCrop.purchasePrice)
         {
-            purchaseCrops(crop);
+            purchaseCrops(selectedCrop);
         }
     }
 
     public void onSwitchCropButton()
     {
-
+        selectedCrop = cropOptions[cropSelection.value];
+        cropInventory = playerController.seedInventory[cropSelection.value];
+        updateUI();
     }
 
     public int getCurDay()

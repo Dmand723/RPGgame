@@ -167,7 +167,7 @@ TextureImporter:
         width: 189
         height: 191
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -175,6 +175,27 @@ TextureImporter:
       bones: []
       spriteID: 613efc078d9615142b33670507eafef9
       internalID: -1879847428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: scrollsandblocks_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 96
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 4, y: 4, z: 4, w: 4}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88640642e19b5d1489aef096a4474bd7
+      internalID: -2002888476
       vertices: []
       indices: 
       edges: []
@@ -190,6 +211,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      scrollsandblocks_3: -2002888476
       scrollsandblocks_0: 1134898997
       scrollsandblocks_1: 1648492769
       scrollsandblocks_2: -1879847428

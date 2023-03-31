@@ -9,4 +9,8 @@ public class Muzzle : MonoBehaviour
     {
         return GetComponentInChildren<SpriteRenderer>();
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
 }

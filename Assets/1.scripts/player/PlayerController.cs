@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 moveInput;
     public float moveSpeed;
     public bool interactInput;
+    public int[] seedInventory = new int[3];
 
     [Header("componets")]
     public Rigidbody2D rig;
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public Transform muzzlePos;
     public Muzzle muzzle;
     private SpriteRenderer muzzleSprite;
+
 
     [Header("debug")]
     public bool debug;
@@ -84,14 +86,15 @@ public class PlayerController : MonoBehaviour
     }
     private void tryInteractTile()
     {
-        Collider2D hit = muzzle.GetComponent<Collider2D>();
+        Collider hit = muzzle.GetComponent<Collider>();
         //RaycastHit2D hit = Physics2D.Raycast(((Vector2)transform.position+facingDir)-new Vector2(0,0.25f), new Vector3(1,0,0)*facingDir,.1f, interactLayer);
         
         
-            if(hit.gameObject.CompareTag("Interact_FieldTile"))
+            if(hit.CompareTag("Interact_FieldTile"))
             {
                FieldTile fieldTile = hit.gameObject.GetComponent<FieldTile>();
                 fieldTile.interact();
+
             }
 
 
@@ -100,6 +103,5 @@ public class PlayerController : MonoBehaviour
                 print("Player Interacted with tile");
                 
             }
-        
     }
 }

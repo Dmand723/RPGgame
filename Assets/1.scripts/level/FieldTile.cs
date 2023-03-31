@@ -33,9 +33,18 @@ public class FieldTile : MonoBehaviour
     {
         
     }
+    private void OnDisable()
+    {
+        GameManager.instance.onNewDayEvent -= onNewDay;
+    }
 
     public void onNewDay()
     {
+
+        if(spriteIndex>0)
+        {
+            spriteIndex--;
+        }
         if (curCrop = null)
         {
             isTilled= false;
@@ -54,7 +63,8 @@ public class FieldTile : MonoBehaviour
     {
         spriteIndex = 1;
         isTilled = true;
-        
+        GameManager.instance.onNewDayEvent += onNewDay;
+
     }
 
     public void water()
@@ -76,7 +86,6 @@ public class FieldTile : MonoBehaviour
         hasCrop = true;
         curCrop = Instantiate(cropPrefab, transform).GetComponent<Crop>();
         curCrop.plant(crop);
-        GameManager.instance.onNewDayEvent += onNewDay;
     }
 
     public void updateSpite()
